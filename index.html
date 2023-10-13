@@ -125,17 +125,7 @@
                     Include Audio
                   </label>
                 </div>
-                <div class="form-check">
-                  <input
-                    type="checkbox"
-                    id="video"
-                    value="1"
-                    onchange="saveInLocalStorage(event)"
-                  />
-                  <label class="form-check-label telnyx-labels" for="video">
-                    Include Video
-                  </label>
-                </div>
+
                 <div class="col-12 col-md-8 mt-4 mt-md-1">
                   <button
                     id="startCall"
@@ -159,40 +149,7 @@
           </div>
         </div>
       </div>
-      <div id="videos_faces" class="row py-3 utils-margin-top-bg">
-        <div class="row w-100">
-          <div class="col-md-6 col-xs-12">
-            <h5>Local Video</h5>
-            <video
-              id="localVideo"
-              autoplay="true"
-              playsinline="true"
-              class="w-100"
-              style="
-                background-color: #000;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                max-height: 300px;
-              "
-            ></video>
-          </div>
-          <div class="col-md-6 col-xs-12">
-            <h5>Remote Video</h5>
-            <video
-              id="remoteVideo"
-              autoplay="true"
-              playsinline="true"
-              class="w-100"
-              style="
-                background-color: #000;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                max-height: 300px;
-              "
-            ></video>
-          </div>
-        </div>
-      </div>
+      
     </div>
     <script type="text/javascript">
       var client;
@@ -202,7 +159,6 @@
       var password = localStorage.getItem('telnyx.example.password') || '';
       var number = localStorage.getItem('telnyx.example.number') || '';
       var audio = localStorage.getItem('telnyx.example.audio') || '1';
-      var video = localStorage.getItem('telnyx.example.video') || '1';
 
       /**
        * On document ready auto-fill the input values from the localStorage.
@@ -212,7 +168,6 @@
         document.getElementById('password').value = password;
         document.getElementById('number').value = number;
         document.getElementById('audio').checked = audio === '1';
-        document.getElementById('video').checked = video === '1';
         document.getElementById('env').checked = '1';
       });
 
@@ -241,18 +196,11 @@
           // ringbackFile: './sounds/ringback_tone.mp3',
         });
 
-        client.remoteElement = 'remoteVideo';
-        client.localElement = 'localVideo';
 
         if (document.getElementById('audio').checked) {
           client.enableMicrophone();
         } else {
           client.disableMicrophone();
-        }
-        if (document.getElementById('video').checked) {
-          client.enableWebcam();
-        } else {
-          client.disableWebcam();
         }
 
         client.on('telnyx.ready', function () {
@@ -362,9 +310,7 @@
           callerNumber: 'Caller Number',
           destinationNumber: document.getElementById('number').value, // required!
           audio: document.getElementById('audio').checked,
-          video: document.getElementById('video').checked
-            ? { aspectRatio: 16 / 9 }
-            : false,
+          video: false,
         };
 
         currentCall = client.newCall(params);
